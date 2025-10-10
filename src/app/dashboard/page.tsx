@@ -10,7 +10,7 @@ import Switch from '@/components/ui/Switch';
 import { FiTrash2 } from 'react-icons/fi';
 import Map from '@/components/Map';
 import SpotTrends from '@/components/SpotTrends';
-import listingsStatic from '../../../data/listings.json';
+import listingsStatic from '@/data/listings.json';
 
 interface ApiResponse {
   listings: ListingBundle[];
