@@ -36,6 +36,70 @@ export default function DocsPage() {
           No implementation is provided by default but the route can be extended.
         </li>
       </ul>
+      <h3>AI-assisted insights</h3>
+      <p>
+        A new server-side endpoint was added to surface potential problem reviews using an AI model:
+      </p>
+      <ul>
+        <li>
+          <code>GET /api/ai/bad-reviews</code> – Scans <code>data/reviews.json</code> and returns reviews that are likely
+          to contain complaints or require host attention. If a Gemini API key is provided (see <code>GEMINI_API_KEY</code>), the
+          endpoint will attempt to call the Gemini generative API and return the model-detected items with an <code>aiReason</code>.
+          When the key is missing or the model call fails, the route falls back to a simple heuristic (low ratings or keyword matching).
+        </li>
+      </ul>
+      <h2>AI / Gemini setup</h2>
+      <p>
+        To enable AI-powered detection you must provide a Gemini API key in your environment. Create a local <code>.env</code> file
+        in the project root with the following variable (do not commit secrets):
+      </p>
+      <pre className="language-properties">GEMINI_API_KEY=YOUR_KEY_HERE</pre>
+      <p>
+        The server route does a best-effort POST to a generic Gemini endpoint. Depending on your Google Cloud setup you may need to
+        adjust <code>src/app/api/ai/bad-reviews/route.ts</code> to match your project’s model name, region, or auth flow (service account
+        token vs. API key). The endpoint returns JSON shaped like <code>{'{ source: "ai" | "heuristic", issues: Review[] , warning?: string }'}</code>.
+      </p>
+
+      <h2>Map & UI updates</h2>
+      <ul>
+        <li>
+          The project was migrated from a Google Maps prototype to <strong>Leaflet + OpenStreetMap</strong> for a simpler, key-free map by default.
+          Leaflet is now installed as an npm dependency and dynamically imported in the client Map component at <code>src/components/Map.tsx</code>.
+        </li>
+        {/* <li>
+          A small UI Loader component was added at <code>src/components/ui/Loader.tsx</code> and replaces text-based loading states across the app
+          with a circular spinner for a consistent experience.
+        </li>
+        <li>
+          Map markers use a custom dark-green location SVG icon to match the brand (see the marker creation in <code>Map.tsx</code>).
+        </li> */}
+      </ul>
+
+      <h2>Files of interest</h2>
+      <ul>
+        <li><code>src/components/Map.tsx</code> — Leaflet integration, dynamic import (avoids SSR errors), custom marker icon and fallback UI.</li>
+        <li><code>src/components/ui/Loader.tsx</code> — Reusable circular loader used across pages and components.</li>
+        <li><code>src/app/api/ai/bad-reviews/route.ts</code> — Server route that runs the AI detection (with a heuristic fallback).</li>
+        <li><code>data/reviews.json</code> — Mocked review dataset used by the API routes and AI scan.</li>
+      </ul>
+
+      <h2>Local testing and developer checklist</h2>
+      <ol>
+        <li>Install dependencies: <code>npm install</code>. (Leaflet and its types were added.)</li>
+        <li>Run a TypeScript check: <code>npx tsc --noEmit</code>.</li>
+        <li>Start the dev server: <code>npm run dev</code> and open <code>/dashboard</code> in the browser.</li>
+        <li>To test AI flow: add <code>GEMINI_API_KEY</code> to <code>.env</code>, restart the dev server and reload the dashboard — the Spot Trends
+          panel will show AI-detected issues (or the heuristic fallback).</li>
+        <li>If the editor reports path-alias errors (e.g. <code>Cannot find module '@/...'</code>), restart your editor’s TypeScript server
+          (VS Code → Command Palette → "TypeScript: Restart TS server") and ensure the workspace TypeScript is selected.</li>
+      </ol>
+
+      <h2>Security & operational notes</h2>
+      <ul>
+        <li>Never commit API keys to version control. Use environment variables and secret management for production deployments.</li>
+        <li>The AI call is done synchronously in the server route for simplicity. Consider adding caching (in-memory TTL) to reduce costs and latency.</li>
+        <li>The AI prompt expects a strict JSON response; the route includes parsing fallbacks but you should test and adapt prompts to your preferred model behavior.</li>
+      </ul>
       <h2>Pages</h2>
       <ul>
         <li>
