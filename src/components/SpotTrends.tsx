@@ -1,6 +1,7 @@
 import type { Review } from '@/lib/types';
 import { FaExclamationTriangle, FaStar } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import Loader from '@/components/ui/Loader';
 
 export default function SpotTrends({ reviews }: { reviews: Review[] }) {
   const [aiIssues, setAiIssues] = useState<Review[] | null>(null);
@@ -54,7 +55,9 @@ export default function SpotTrends({ reviews }: { reviews: Review[] }) {
     <section>
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium mb-2">Spot Trends — Issues</h2>
-        {loading && <div className="text-sm text-gray-500">Scanning reviews…</div>}
+        {loading && (
+          <div className="flex items-center gap-2"><Loader /><span className="text-sm text-gray-500">Scanning reviews</span></div>
+        )}
       </div>
       {error && <div className="text-sm text-yellow-600 mb-2">AI warning: {error}</div>}
       <div className="flex gap-4 overflow-x-auto py-2">

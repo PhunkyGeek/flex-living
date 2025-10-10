@@ -88,6 +88,20 @@ export default function Map({ locations = [], height = '400px', zoom = 12, selec
           attribution: '&copy; OpenStreetMap contributors',
         }).addTo(mapRef.current);
 
+        // create a dark green marker icon (SVG data URI)
+        const svgIcon = encodeURIComponent(`
+          <svg xmlns='http://www.w3.org/2000/svg' width='32' height='42' viewBox='0 0 32 42'>
+            <path d='M16 0C9.4 0 4 5.4 4 12c0 9.6 12 24 12 24s12-14.4 12-24c0-6.6-5.4-12-12-12z' fill='#284E4C' />
+            <circle cx='16' cy='12' r='5' fill='white' />
+          </svg>
+        `);
+        const icon = L.icon({
+          iconUrl: `data:image/svg+xml;utf8,${svgIcon}`,
+          iconSize: [32, 42],
+          iconAnchor: [16, 42],
+          popupAnchor: [0, -38],
+        });
+
         // add markers
         const existing = markersRef.current;
         const newIds = new Set<string>();
@@ -95,7 +109,7 @@ export default function Map({ locations = [], height = '400px', zoom = 12, selec
           const id = String(c.id);
           newIds.add(id);
           if (!existing[id]) {
-            const marker = L.marker([c.lat, c.lng]).addTo(mapRef.current);
+            const marker = L.marker([c.lat, c.lng], { icon }).addTo(mapRef.current);
             if (c.title) marker.bindPopup(`<strong>${c.title}</strong>`);
             existing[id] = marker;
           } else {
@@ -171,11 +185,13 @@ export default function Map({ locations = [], height = '400px', zoom = 12, selec
     return (
       <div className="rounded-md border flex items-center justify-center" style={{ height }}>
         <div className="flex flex-col items-center gap-3">
-          <svg className="animate-spin h-8 w-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-          </svg>
-          <div className="text-sm text-gray-600">Map is taking longer than expected — loading fallback map…</div>
+          <div className="p-2 bg-white rounded-full">
+            <svg className="animate-spin h-8 w-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="#CBD5E1" strokeWidth="4"></circle>
+              <path d="M22 12a10 10 0 00-10-10" stroke="#284E4C" strokeWidth="4" strokeLinecap="round" />
+            </svg>
+          </div>
+          <div className="text-sm text-gray-600">Map is taking longer than expected</div>
         </div>
       </div>
     );

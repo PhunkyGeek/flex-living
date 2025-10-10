@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getNormalizedListings } from '@/lib/reviews';
+import type { ListingBundle } from '@/lib/types';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -31,7 +32,7 @@ export async function GET(req: NextRequest) {
   // by the computed `listingId` (slug) so `/property/<slug>` works.
   if (filters.listing && data.listings.length === 0) {
     const all = await getNormalizedListings();
-    const matched = all.listings.filter((l) => l.listingId === filters.listing);
+  const matched = all.listings.filter((l: ListingBundle) => l.listingId === filters.listing);
     if (matched.length > 0) {
       return new Response(JSON.stringify({ listings: matched, totals: { reviewCount: matched.reduce((s, l) => s + l.reviews.length, 0), listingCount: matched.length }, filters }), {
         status: 200,

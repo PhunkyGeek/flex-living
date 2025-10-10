@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import Loader from '@/components/ui/Loader';
 import FilterBar from '@/components/FilterBar';
 import ListingCard from '@/components/ListingCard';
 import type { ListingBundle, Review } from '@/lib/types';
@@ -57,23 +58,23 @@ export default function DashboardPage() {
   useEffect(() => {
     let result = listings;
     // search by listing name or guest names inside reviews
-    if (search) {
+      if (search) {
       const q = search.toLowerCase();
-      result = result.filter((l) => {
+      result = result.filter((l: ListingBundle) => {
         if (l.listingName.toLowerCase().includes(q)) return true;
         // check guest names
-        return l.reviews.some((rev) => rev.guestName?.toLowerCase().includes(q));
+        return l.reviews.some((rev: Review) => rev.guestName?.toLowerCase().includes(q));
       });
     }
     if (channel) {
       result = result.filter((l) => Object.keys(l.channelStats).includes(channel));
     }
     if (type) {
-      result = result.map((l) => ({
+      result = result.map((l: ListingBundle) => ({
         ...l,
-        reviews: l.reviews.filter((rev) => rev.type === type),
+        reviews: l.reviews.filter((rev: Review) => rev.type === type),
       }))
-        .filter((l) => l.reviews.length > 0);
+        .filter((l: ListingBundle) => l.reviews.length > 0);
     }
     if (minRating > 0) {
       result = result.filter((l) => (l.ratingAvg ?? 0) >= minRating);
@@ -84,20 +85,20 @@ export default function DashboardPage() {
   const channels = Array.from(
     new Set(
       listings
-        .flatMap((l) => Object.keys(l.channelStats))
+        .flatMap((l: ListingBundle) => Object.keys(l.channelStats))
         .filter((c) => c && c.trim().length > 0)
     )
   );
   const types = Array.from(
     new Set(
       listings
-        .flatMap((l) => l.reviews.map((rev) => rev.type))
+        .flatMap((l: ListingBundle) => l.reviews.map((rev: Review) => rev.type))
         .filter((t) => t && t.trim().length > 0)
     )
   );
   // derive latest comments across all listings (sorted by submittedAt desc)
   const latestComments = listings
-    .flatMap((l) => l.reviews.map((r) => ({ ...r, listingName: l.listingName } as Review & { listingName: string })))
+    .flatMap((l: ListingBundle) => l.reviews.map((r: Review) => ({ ...r, listingName: l.listingName } as Review & { listingName: string })))
     .sort((a, b) => (a.submittedAt < b.submittedAt ? 1 : -1))
     .slice(0, 10);
 
@@ -148,7 +149,7 @@ export default function DashboardPage() {
         }}
       />
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex items-center gap-2"><Loader /><span className="text-sm text-gray-600">Loading</span></div>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : filtered.length === 0 ? (
@@ -158,8 +159,8 @@ export default function DashboardPage() {
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           <div className="lg:col-span-2">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-              {filtered.map((l) => (
-                <ListingCard key={l.listingId} bundle={l} listingData={listingData[l.listingId]} onSelect={(id)=>setSelectedListingId(id)} />
+              {filtered.map((l: ListingBundle) => (
+                <ListingCard key={l.listingId} bundle={l} listingData={listingData[l.listingId]} onSelect={(id: string) => setSelectedListingId(id)} />
               ))}
             </div>
           </div>
@@ -179,17 +180,17 @@ export default function DashboardPage() {
       )}
       {/* Spot trends (issues) carousel */}
       <div className="mt-6">
-        <SpotTrends reviews={listings.flatMap((l) => l.reviews.map((r) => ({ ...r, listingName: l.listingName })))} />
+  <SpotTrends reviews={listings.flatMap((l: ListingBundle) => l.reviews.map((r: Review) => ({ ...r, listingName: l.listingName })))} />
       </div>
       {/* Latest comments carousel moved below listings */}
       <section>
         <h2 className="text-lg font-medium mt-4 mb-2">Latest Comments</h2>
         <div className="flex gap-4 overflow-x-auto py-2">
-          {latestComments.map((c) => {
+          {latestComments.map((c: Review & { listingName?: string }) => {
             // compute rating for the card (explicit rating or derived from categories)
             const computeRating = (rev: Review) => {
               if (rev.rating != null) return rev.rating;
-              const derived = rev.reviewCategory.reduce((acc, cat) => acc + cat.rating / 2, 0) / rev.reviewCategory.length;
+              const derived = rev.reviewCategory.reduce((acc: number, cat: any) => acc + (cat.rating || 0) / 2, 0) / rev.reviewCategory.length;
               return derived;
             };
             const rating = computeRating(c as Review);
@@ -236,7 +237,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between mt-4">
                   <div className="text-sm text-gray-500">{new Date(c.submittedAt).toLocaleDateString()}</div>
                   <div className="flex items-center gap-1">
-                    {[1,2,3,4,5].map((i)=> (
+                    {[1,2,3,4,5].map((i: number) => (
                       <FaStar key={i} className={`h-4 w-4 ${i<=filled ? 'text-yellow-500' : 'text-gray-200'}`} aria-hidden />
                     ))}
                   </div>

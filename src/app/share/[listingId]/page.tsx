@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import type { ListingBundle } from '../../../lib/types';
 import PublicReviewsSection from '../../../components/PublicReviewsSection';
+import Loader from '../../../components/ui/Loader';
 
 export default function ShareListingPage() {
   const params = useParams();
@@ -31,7 +32,7 @@ export default function ShareListingPage() {
   return (
     <div className="space-y-4">
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex items-center gap-2"><Loader /><span className="text-sm text-gray-600">Loading</span></div>
       ) : error || !bundle ? (
         <p className="text-red-500">{error || 'Listing not found'}</p>
       ) : (

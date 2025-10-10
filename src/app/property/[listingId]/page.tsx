@@ -32,6 +32,7 @@ import {
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import listingsStatic from '../../../../data/listings.json';
 import Map from '../../../components/Map';
+import Loader from '../../../components/ui/Loader';
 
 export default function PropertyPage() {
   const params = useParams();
@@ -113,7 +114,7 @@ export default function PropertyPage() {
   return (
     <div className="container mx-auto px-6 py-6">
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex items-center gap-2"><Loader /><span className="text-sm text-gray-600">Loading</span></div>
       ) : error || !bundle ? (
         <p className="text-red-500">{error || 'Listing not found'}</p>
       ) : (

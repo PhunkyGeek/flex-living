@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import listingsStatic from '@/data/listings.json';
+import listingsStatic from '../../data/listings.json';
 
 export default function ShareIndexPage() {
   const listings = listingsStatic as any[];
