@@ -30,7 +30,7 @@ import {
   FaComment,
 } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import listingsStatic from '../../../../data/listings.json';
+import listingsStatic from '../../../data/listings.json';
 import Map from '../../../components/Map';
 import Loader from '../../../components/ui/Loader';
 
