@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FaBed, FaBath, FaUserFriends, FaStar } from 'react-icons/fa';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import type { ListingBundle, Review } from '@/lib/types';
+import type { ListingBundle, Review } from '../lib/types';
 
 interface ListingCardProps {
   bundle: ListingBundle;

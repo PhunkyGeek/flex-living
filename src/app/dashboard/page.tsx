@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Loader from '@/components/ui/Loader';
-import FilterBar from '@/components/FilterBar';
-import ListingCard from '@/components/ListingCard';
-import type { ListingBundle, Review } from '@/lib/types';
+import Loader from '../../components/ui/Loader';
+import FilterBar from '../../components/FilterBar';
+import ListingCard from '../../components/ListingCard';
+import type { ListingBundle, Review } from '../../lib/types';
 import { useCallback } from 'react';
 import { FaStar } from 'react-icons/fa';
-import Switch from '@/components/ui/Switch';
+import Switch from '../../components/ui/Switch';
 import { FiTrash2 } from 'react-icons/fi';
-import Map from '@/components/Map';
-import SpotTrends from '@/components/SpotTrends';
-import listingsStatic from '@/data/listings.json';
+import Map from '../../components/Map';
+import SpotTrends from '../../components/SpotTrends';
+import listingsStatic from '../../data/listings.json';
 
 interface ApiResponse {
   listings: ListingBundle[];

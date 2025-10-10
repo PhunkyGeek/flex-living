@@ -1,7 +1,7 @@
-import type { Review } from '@/lib/types';
+import type { Review } from '../lib/types';
 import { FaExclamationTriangle, FaStar } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import Loader from '@/components/ui/Loader';
+import Loader from '../components/ui/Loader';
 
 export default function SpotTrends({ reviews }: { reviews: Review[] }) {
   const [aiIssues, setAiIssues] = useState<Review[] | null>(null);

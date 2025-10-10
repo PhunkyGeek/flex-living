@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { getNormalizedListings } from '@/lib/reviews';
-import type { ListingBundle } from '@/lib/types';
+import { getNormalizedListings } from '../../../../lib/reviews';
+import type { ListingBundle } from '../../../../lib/types';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
