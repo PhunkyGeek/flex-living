@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet styles (moved from component to global so Next.js allows it) */
+@import 'leaflet/dist/leaflet.css';
+
+:root {
+  --color-brand: theme('colors.brand.DEFAULT');
+}
+
+body {
+  @apply font-sans bg-gray-50 text-gray-900;
+}
+
+a {
+  @apply text-brand-dark hover:underline;
+}
